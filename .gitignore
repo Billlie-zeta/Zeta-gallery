@@ -1,0 +1,10 @@
+# 자동 생성 파일 (배포 시 매번 새로 만들어짐 — 신경 안 써도 됨)
+gallery.json
+
+# OS 잡파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude Code 설정
+.claude/
