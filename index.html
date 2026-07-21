@@ -266,14 +266,16 @@ Promise.all([
   chars.forEach(ch=>{
     const parts=splitFolder(ch.folder);
     const cInfo=info[ch.folder]||info[ch.name]||{};
-    ch.images.forEach((file,i)=>{
+    ch.images.forEach((img,i)=>{
+      const file=(img&&typeof img==='object')?img.file:img;
+      const ts=(img&&typeof img==='object'&&typeof img.ts==='number')?img.ts:0;
       const meta=cInfo[file]||{};
       const tags=Array.isArray(meta.tags)?meta.tags.map(t=>String(t).replace(/^#/,'').trim()).filter(Boolean):[];
       ITEMS.push({
         folder:ch.folder, main:parts.main, sub:parts.sub, file,
         src:'images/'+enc(ch.folder+'/'+file),
         title:meta.title||'', memo:meta.memo||'', tags,
-        seq:i,
+        seq:i, ts,
       });
     });
   });
@@ -297,8 +299,8 @@ function currentList(){
   if(q) list=list.filter(i=>(i.title+' '+i.main+' '+i.sub+' '+i.memo+' '+i.tags.join(' ')+' '+i.file).toLowerCase().includes(q));
   if(S.tags.length) list=list.filter(i=>S.tags.every(t=>i.tags.includes(t)));
   list.sort((a,b)=>{
-    if(a.folder!==b.folder) return a.folder.localeCompare(b.folder);
-    return S.sortDesc ? b.file.localeCompare(a.file) : a.file.localeCompare(b.file);
+    if(a.ts!==b.ts) return S.sortDesc ? b.ts-a.ts : a.ts-b.ts;
+    return a.file.localeCompare(b.file);
   });
   return list;
 }
