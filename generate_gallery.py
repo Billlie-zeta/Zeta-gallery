@@ -3,16 +3,33 @@
 images/ 폴더를 훑어서 gallery.json 을 자동으로 만듭니다.
 - images/<캐릭터이름>/ 아래의 이미지 파일들을 모읍니다.
 - 캐릭터(폴더) 순서는 이름 가나다순입니다.
+- 각 이미지에 Git 커밋 시각(ts, 유닉스초)을 붙입니다. 커밋 기록이 없으면 0.
 - 직접 실행할 필요 없음: 깃허브에 올리면 자동으로 돌아갑니다.
 """
 
 import json
 import os
+import subprocess
 from datetime import datetime, timezone
 
 IMAGES_DIR = "images"
 OUTPUT = "gallery.json"
 EXTS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".avif"}
+
+
+def git_commit_ts(path):
+    """해당 파일이 마지막으로 커밋된 시각(유닉스초)을 반환. 기록이 없으면 0."""
+    try:
+        result = subprocess.run(
+            ["git", "log", "-1", "--format=%ct", "--", path],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        out = result.stdout.strip()
+        return int(out) if out else 0
+    except Exception:
+        return 0
 
 
 def main():
@@ -33,10 +50,18 @@ def main():
             if not files:
                 continue
 
+            images = []
+            for f in files:
+                rel = os.path.join(IMAGES_DIR, folder, f)
+                images.append({
+                    "file": f,
+                    "ts": git_commit_ts(rel),
+                })
+
             characters.append({
                 "name": folder,
                 "folder": folder,
-                "images": files,
+                "images": images,
             })
 
     data = {
