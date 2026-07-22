@@ -130,7 +130,7 @@
     display:flex;align-items:center;gap:6px;
   }
 
-  .count{padding:12px clamp(16px,4vw,40px) 4px;font-size:13px;color:var(--subtext)}
+  .count{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px clamp(16px,4vw,40px) 4px;font-size:13px;color:var(--subtext)}
 
   .grid-wrap{padding:8px clamp(16px,4vw,40px) 56px}
   .grid{column-width:238px;column-gap:18px}
@@ -338,17 +338,21 @@ function render(){
     b.onclick=()=>{S.tags=S.tags.includes(t)?S.tags.filter(x=>x!==t):S.tags.concat(t);render();};
     ctr.appendChild(b);
   });
+
+  const list=currentList();
+  S.view=list;
+  const countEl=document.getElementById('count');
+  countEl.innerHTML='';
   if(ITEMS.length){
+    const cspan=document.createElement('span');
+    cspan.textContent=list.length+'개의 일러스트';
+    countEl.appendChild(cspan);
     const sb=document.createElement('button');
     sb.className='sortbtn';
     sb.innerHTML=(S.sortDesc?'↓ 최신순':'↑ 오래된순');
     sb.onclick=()=>{S.sortDesc=!S.sortDesc;render();};
-    ctr.appendChild(sb);
+    countEl.appendChild(sb);
   }
-
-  const list=currentList();
-  S.view=list;
-  document.getElementById('count').textContent=ITEMS.length?(list.length+'개의 일러스트'):'';
 
   const gw=document.getElementById('gridWrap');
   gw.innerHTML='';
