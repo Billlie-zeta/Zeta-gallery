@@ -134,18 +134,18 @@
 
   .grid-wrap{padding:8px clamp(16px,4vw,40px) 120px}
   .grid{display:grid;gap:18px;grid-template-columns:repeat(4,1fr)}
-  /* 스태거: 짝수 열을 카드 높이의 30%만큼 아래로 내려 지그재그 리듬 */
+  /* 스태거: 짝수 열을 카드 높이의 15%만큼 아래로 내려 지그재그 리듬 */
   @media (min-width:1001px){
     .grid>.card:nth-child(4n+2),
-    .grid>.card:nth-child(4n){--offset:30%}
+    .grid>.card:nth-child(4n){--offset:15%}
   }
   @media (max-width:1000px) and (min-width:681px){
     .grid{grid-template-columns:repeat(3,1fr)}
-    .grid>.card:nth-child(3n+2){--offset:30%}
+    .grid>.card:nth-child(3n+2){--offset:15%}
   }
   @media (max-width:680px) and (min-width:441px){
     .grid{grid-template-columns:repeat(2,1fr)}
-    .grid>.card:nth-child(2n){--offset:30%}
+    .grid>.card:nth-child(2n){--offset:15%}
   }
   @media (max-width:440px){
     .grid{grid-template-columns:1fr}
